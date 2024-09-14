@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     const rutas = document.querySelectorAll("#rutas p");
     const enviarBtn = document.getElementById("enviar");
-    const result = document.getElementById("result");
     const feedback = document.getElementById("feedback");
 
     let draggedItem = null;
-    let originalParent = null; // Para guardar el contenedor original del elemento
+    let originalParent = null; // Para guardar el contenedor original
+    let isTouchDevice = 'ontouchstart' in document.documentElement; // Verifica si es un dispositivo táctil
 
     // Añade eventos para drag and drop
     rutas.forEach(ruta => {
@@ -13,6 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
         ruta.addEventListener('dragstart', dragStart);
         ruta.addEventListener('dragover', dragOver);
         ruta.addEventListener('drop', drop);
+        
+        if (isTouchDevice) {
+            ruta.addEventListener('touchstart', touchStart);
+            ruta.addEventListener('touchmove', touchMove);
+            ruta.addEventListener('touchend', touchEnd);
+        }
     });
 
     function dragStart(e) {
@@ -33,6 +39,39 @@ document.addEventListener("DOMContentLoaded", () => {
             draggedItem.style.display = 'block';
             draggedItem = null;
         }
+    }
+
+    function touchStart(e) {
+        draggedItem = e.target;
+        originalParent = draggedItem.parentNode; // Guardar el contenedor original
+        draggedItem.classList.add('selected'); // Resaltar el elemento seleccionado
+    }
+
+    function touchMove(e) {
+        if (!draggedItem) return;
+        
+        // Mueve el elemento seleccionado a la posición del toque
+        const touchLocation = e.touches[0];
+        draggedItem.style.position = 'absolute';
+        draggedItem.style.left = `${touchLocation.pageX}px`;
+        draggedItem.style.top = `${touchLocation.pageY}px`;
+    }
+
+    function touchEnd(e) {
+        if (!draggedItem) return;
+
+        const rutasContainer = document.getElementById('rutas');
+        const target = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+        
+        if (target && target.tagName === 'P' && target !== draggedItem) {
+            rutasContainer.insertBefore(draggedItem, target);
+        } else {
+            originalParent.appendChild(draggedItem); // Volver al contenedor original
+        }
+        
+        draggedItem.classList.remove('selected');
+        draggedItem.style.position = 'static'; // Reiniciar estilo
+        draggedItem = null; // Limpiar la variable
     }
 
     // Manejar el caso de soltar fuera del contenedor
@@ -57,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
         draggedItem = null; // Limpiar la variable
     });
 
-    
     function verificarOrden() {
         const rutasContainer = document.getElementById('rutas');
         const rutas = Array.from(rutasContainer.children);
@@ -89,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-
     // Asocia la verificación con el botón "Enviar"
     document.getElementById('enviar').addEventListener('click', verificarOrden);
     
