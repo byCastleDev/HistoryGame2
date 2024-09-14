@@ -1,15 +1,18 @@
- // Función para desordenar aleatoriamente elementos de una lista
- function shuffle(containerId) {
+const inicio = document.getElementById("Inicio");
+
+const fin = document.getElementById("Fin");
+
+function shuffle(containerId) {
     const container = document.getElementById(containerId);
     const items = Array.from(container.children);
     items.sort(() => Math.random() - 0.5); // Desordenar aleatoriamente
     items.forEach(item => container.appendChild(item)); // Reorganizar
-}
+} 
 
 // Verificación de si el inicio y el fin son correctos
 function verificarOrden() {
-    const inicioContainer = document.getElementById('inicio');
-    const finContainer = document.getElementById('fin');
+    const inicioContainer = document.getElementById('Inicio');
+    const finContainer = document.getElementById('Fin');
 
     const inicio = Array.from(inicioContainer.children);
     const fin = Array.from(finContainer.children);
@@ -51,27 +54,34 @@ function verificarOrden() {
     }
 }
 
-// Función Drag and Drop para una lista específica
-function dragDropSetup(containerId) {
-    const container = document.getElementById(containerId);
-    Sortable.create(container, {
-        animation: 150, // Añade animación
-        ghostClass: "sortable-ghost", // Clase CSS para el elemento fantasma
-        onStart: function (evt) {
-            evt.item.style.visibility = 'hidden'; // Oculta el item mientras se arrastra
-        },
-        onEnd: function (evt) {
-            evt.item.style.visibility = 'visible'; // Muestra el item cuando se suelta
-        }
-    });
-}
+// Inicializa Sortable en el contenedor de rutas
+new Sortable(inicio, {
+    animation: 150,
+    ghostClass: 'sortable-ghost', // Clase para el elemento que se está moviendo
+    chosenClass: 'sortable-chosen', // Clase para el elemento seleccionado
+    dragClass: 'sortable-drag', // Clase para el elemento arrastrado
+    onEnd: (event) => {
+        // Aquí puedes manejar el evento de finalizar el arrastre
+        console.log(`Moved ${event.item.textContent} from index ${event.oldIndex} to ${event.newIndex}`);
+    }
+});
+
+// Inicializa Sortable en el contenedor de rutas
+new Sortable(fin, {
+    animation: 150,
+    ghostClass: 'sortable-ghost', // Clase para el elemento que se está moviendo
+    chosenClass: 'sortable-chosen', // Clase para el elemento seleccionado
+    dragClass: 'sortable-drag', // Clase para el elemento arrastrado
+    onEnd: (event) => {
+        // Aquí puedes manejar el evento de finalizar el arrastre
+        console.log(`Moved ${event.item.textContent} from index ${event.oldIndex} to ${event.newIndex}`);
+    }
+});
 
 // Desordenar rutas al cargar la página
 window.onload = function() {
-    shuffle('inicio');
-    shuffle('fin');
-    dragDropSetup('inicio');
-    dragDropSetup('fin');
+    shuffle("Inicio");
+    shuffle("Fin");
 };
 
 // Verificar orden al hacer clic en el botón

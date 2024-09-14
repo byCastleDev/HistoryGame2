@@ -1,3 +1,4 @@
+const long = document.getElementById("long");
 // Función para desordenar aleatoriamente elementos de una lista
 function shuffle(containerId) {
     const container = document.getElementById(containerId);
@@ -5,6 +6,18 @@ function shuffle(containerId) {
     items.sort(() => Math.random() - 0.5); // Desordenar aleatoriamente
     items.forEach(item => container.appendChild(item)); // Reorganizar
 } 
+
+// Inicializa Sortable en el contenedor de rutas
+new Sortable(long, {
+    animation: 150,
+    ghostClass: 'sortable-ghost', // Clase para el elemento que se está moviendo
+    chosenClass: 'sortable-chosen', // Clase para el elemento seleccionado
+    dragClass: 'sortable-drag', // Clase para el elemento arrastrado
+    onEnd: (event) => {
+        // Aquí puedes manejar el evento de finalizar el arrastre
+        console.log(`Moved ${event.item.textContent} from index ${event.oldIndex} to ${event.newIndex}`);
+    }
+});
 
 // Verificación del orden de longitud
 function verificarOrden() {
@@ -26,62 +39,9 @@ function verificarOrden() {
         swal("¡Error!", "Algunas longitudes están mal ordenadas.", "error");
     }
 }
-
-// Función Drag and Drop
-function dragDropSetup() {
-    const dragItems = document.querySelectorAll('#long p');
-    let draggedItem = null;
-    const originalPositions = new Map();
-
-    dragItems.forEach(item => {
-        item.draggable = true;
-        // Guardar la posición original
-        originalPositions.set(item, item.parentNode);
-
-        item.addEventListener('dragstart', function() {
-            draggedItem = item;
-            setTimeout(() => item.style.visibility = 'hidden', 0); // Ocultar temporalmente
-        });
-
-        item.addEventListener('dragend', function() {
-            setTimeout(() => {
-                item.style.visibility = 'visible'; // Mostrar de nuevo
-                draggedItem = null;
-            }, 0);
-        });
-
-        item.addEventListener('dragover', function(e) {
-            e.preventDefault();
-        });
-
-        item.addEventListener('drop', function(e) {
-            e.preventDefault();
-            const container = this.parentElement;
-            if (draggedItem !== this) {
-                container.insertBefore(draggedItem, this);
-            }
-        });
-    });
-
-    // Manejar el caso cuando el elemento es soltado fuera del contenedor
-    document.addEventListener('dragend', function() {
-        if (!draggedItem) return;
-
-        const dropContainer = document.getElementById('long');
-        const dropZone = dropContainer.getBoundingClientRect();
-        const itemRect = draggedItem.getBoundingClientRect();
-
-        if (itemRect.bottom < dropZone.top || itemRect.top > dropZone.bottom) {
-            // Volver al lugar original
-            originalPositions.get(draggedItem).appendChild(draggedItem);
-        }
-    });
-}
-
 // Desordenar longitudes al cargar la página
 window.onload = function() {
     shuffle('long');
-    dragDropSetup();
 };
 
 // Verificar orden al hacer clic en el botón

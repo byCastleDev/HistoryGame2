@@ -1,44 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const departamentos = document.querySelectorAll("#departamentos p");
-    const capitales = document.querySelectorAll("#capitales p");
+    const departamentos = document.getElementById("departamentos");
+    const capitales = document.getElementById("capitales");
     const enviarBtn = document.getElementById("enviar");
 
-    // Añadir eventos a departamentos y capitales
-    setupDragAndDrop(departamentos);
-    setupDragAndDrop(capitales);
+    new Sortable(departamentos, {
+        animation: 150,
+        ghostClass: 'sortable-ghost', // Clase para el elemento que se está moviendo
+        chosenClass: 'sortable-chosen', // Clase para el elemento seleccionado
+        dragClass: 'sortable-drag', // Clase para el elemento arrastrado
+        onEnd: (event) => {
+            // Aquí puedes manejar el evento de finalizar el arrastre
+            console.log(`Moved ${event.item.textContent} from index ${event.oldIndex} to ${event.newIndex}`);
+        }
+    });
 
-    // Función para configurar Drag and Drop
-    function setupDragAndDrop(items) {
-        let draggedItem = null;
-
-        items.forEach(item => {
-            item.draggable = true;
-
-            item.addEventListener('dragstart', function () {
-                draggedItem = item;
-                item.style.opacity = '0.5';
-            });
-
-            item.addEventListener('dragend', function () {
-                setTimeout(() => {
-                    draggedItem.style.opacity = '1';
-                    draggedItem = null;
-                }, 0);
-            });
-
-            item.addEventListener('dragover', function (e) {
-                e.preventDefault();
-            });
-
-            item.addEventListener('drop', function (e) {
-                e.preventDefault();
-                if (draggedItem !== this) {
-                    const container = this.parentElement;
-                    container.insertBefore(draggedItem, this);
-                }
-            });
-        });
-    }
+    new Sortable(capitales, {
+        animation: 150,
+        ghostClass: 'sortable-ghost', // Clase para el elemento que se está moviendo
+        chosenClass: 'sortable-chosen', // Clase para el elemento seleccionado
+        dragClass: 'sortable-drag', // Clase para el elemento arrastrado
+        onEnd: (event) => {
+            // Aquí puedes manejar el evento de finalizar el arrastre
+            console.log(`Moved ${event.item.textContent} from index ${event.oldIndex} to ${event.newIndex}`);
+        }
+    });
 
     // Función para verificar el orden
     function verificarOrden(containerId) {
