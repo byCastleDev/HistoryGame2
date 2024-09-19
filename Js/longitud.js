@@ -21,23 +21,38 @@ new Sortable(long, {
 
 // Verificación del orden de longitud
 function verificarOrden() {
-    const longitudes = Array.from(document.getElementById('long').children);
-    let correcto = true;
+    const rutas = Array.from(document.getElementById("long").children);
 
-    // Verificar si están en orden ascendente
-    for (let i = 0; i < longitudes.length - 1; i++) {
-        if (parseInt(longitudes[i].getAttribute('data-value')) > parseInt(longitudes[i + 1].getAttribute('data-value'))) {
-            correcto = false;
-            break;
+    let ordenCorrecto = true;
+
+    rutas.forEach((ruta, index) => {
+        const valor = ruta.getAttribute('data-value');
+        if (valor != (index + 1)) {
+            ordenCorrecto = false;
         }
-    }
+    });
+
+   
 
     // Mostrar resultado con SweetAlert
-    if (correcto) {
+    if (ordenCorrecto) {
         swal("¡Correcto!", "Has ordenado correctamente las longitudes.", "success");
     } else {
         swal("¡Error!", "Algunas longitudes están mal ordenadas.", "error");
     }
+}
+
+function ordenCorrecto(){
+    const rutas = Array.from(document.getElementById("long").children);
+    rutas.forEach((ruta, index) => {
+        const valor = ruta.getAttribute('data-value');
+        if (valor != (index + 1)) {
+            ruta.style.backgroundColor = "red";
+        }else{
+            ruta.style.backgroundColor = "green";
+        }
+    })
+
 }
 // Desordenar longitudes al cargar la página
 window.onload = function() {
@@ -46,3 +61,4 @@ window.onload = function() {
 
 // Verificar orden al hacer clic en el botón
 document.getElementById('enviar').addEventListener('click', verificarOrden);
+document.getElementById('enviar').addEventListener('click', ordenCorrecto);

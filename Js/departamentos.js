@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const correctoDepartamentos = verificarOrden('departamentos');
         const correctoCapitales = verificarOrden('capitales');
 
+
         // Mostrar resultados con SweetAlert
         if (correctoDepartamentos) {
             swal({
@@ -70,6 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    
+    
     // Función para desordenar elementos
     function shuffle(containerId) {
         const container = document.getElementById(containerId);
@@ -84,3 +87,28 @@ document.addEventListener("DOMContentLoaded", () => {
         shuffle('capitales');
     };
 });
+
+function ordenCorrecto(){
+    const departamentos = Array.from(document.getElementById("departamentos").children);
+    departamentos.forEach((ruta, index) => {
+        const valor = ruta.getAttribute('data-value');
+        if (valor != (index + 1)) {
+            ruta.style.backgroundColor = "red";
+        }else{
+            ruta.style.backgroundColor = "green";
+        }
+    })
+
+    const capitales = Array.from(document.getElementById("capitales").children);
+    capitales.forEach((ruta, index) => {
+        const valor = ruta.getAttribute('data-value');
+        if (valor != (index + 1)) {
+            ruta.style.backgroundColor = "red";
+        }else{
+            ruta.style.backgroundColor = "green";
+        }
+    })
+}
+  
+
+document.getElementById('enviar').addEventListener('click', ordenCorrecto);

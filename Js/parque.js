@@ -1,6 +1,6 @@
-const inicio = document.getElementById("Inicio");
+const inicio = document.getElementById("name");
 
-const fin = document.getElementById("Fin");
+const fin = document.getElementById("ubicaciones");
 
 function shuffle(containerId) {
     const container = document.getElementById(containerId);
@@ -11,8 +11,8 @@ function shuffle(containerId) {
 
 // Verificación de si el inicio y el fin son correctos
 function verificarOrden() {
-    const inicioContainer = document.getElementById('Inicio');
-    const finContainer = document.getElementById('Fin');
+    const inicioContainer = document.getElementById('name');
+    const finContainer = document.getElementById('ubicaciones');
 
     const inicio = Array.from(inicioContainer.children);
     const fin = Array.from(finContainer.children);
@@ -55,8 +55,8 @@ function verificarOrden() {
 }
 
 function ordenCorrecto(){
-    const inicioContainer = document.getElementById('Inicio');
-    const finContainer = document.getElementById('Fin');
+    const inicioContainer = document.getElementById('name');
+    const finContainer = document.getElementById('ubicaciones');
 
     const inicio = Array.from(inicioContainer.children);
     const fin = Array.from(finContainer.children);
@@ -106,8 +106,8 @@ new Sortable(fin, {
 
 // Desordenar rutas al cargar la página
 window.onload = function() {
-    shuffle("Inicio");
-    shuffle("Fin");
+    shuffle("name");
+    shuffle("ubicaciones");
 };
 
 // Verificar orden al hacer clic en el botón
